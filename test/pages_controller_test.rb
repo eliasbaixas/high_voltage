@@ -12,7 +12,7 @@ class HighVoltage::PagesControllerTest < ActionController::TestCase
     setup do
       @filename = '/tmp/pages/exists.html.erb'
 
-      FileUtils.mkdir(File.dirname(@filename))
+      FileUtils.mkdir_p(File.dirname(@filename))
       File.open(@filename, 'w') do |file|
         file << "hello <%= 'world' %>"
       end
@@ -33,6 +33,32 @@ class HighVoltage::PagesControllerTest < ActionController::TestCase
       end
     end
   end
+  context "on GET to a nested page that exists" do
+    setup do
+      @filename = '/tmp/pages/nested/exists.html.erb'
+
+      FileUtils.mkdir_p(File.dirname(@filename))
+      File.open(@filename, 'w') do |file|
+        file << "hello <%= 'world' %>"
+      end
+      assert File.exists?(@filename)
+
+      get :show, :id => ['nested','exists']
+    end
+
+    should_respond_with :success
+    should_render_template 'exists'
+
+    teardown do
+      begin
+        FileUtils.rm(@filename)
+        FileUtils.rmdir(File.dirname(@filename))
+      rescue StandardError => e
+        puts "Error while removing files: #{e}"
+      end
+    end
+  end
+
 
   context "on GET to /pages/invalid" do
     setup { get :show, :id => "invalid" }

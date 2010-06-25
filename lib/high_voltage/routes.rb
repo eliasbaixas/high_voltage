@@ -11,10 +11,13 @@ module HighVoltage
     # @example
     #   map.resources :pages, :controller => :pages, :only => [:show]
     #   # HighVoltage::Routes.draw(map)
+    #def self.draw(map)
+      #map.resources :pages,
+        #:controller => 'high_voltage/pages',
+        #:only       => [:show]
+    #end
     def self.draw(map)
-      map.resources :pages,
-        :controller => 'high_voltage/pages',
-        :only       => [:show]
+      map.connect 'pages/*id', :controller => 'high_voltage/pages', :action => 'show'
     end
   end
 end

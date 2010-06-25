@@ -15,7 +15,7 @@ class HighVoltage::PagesController < ApplicationController
   end
 
   def current_page
-    "pages/#{params[:id].to_s.downcase}"
+    "pages/#{File.join(*params[:id]).downcase}"
   end
 
   def template_exists?(path)
